@@ -93,20 +93,20 @@ public class SlingscoldWindow : Widgets.CompositedWindow {
         this.categories.set_active (0);
         //top.pack_start (this.categories, true, true, 20); // With categories or not
         
-        this.top_spacer = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 20);
+        this.top_spacer = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 200);
         this.top_spacer.realize.connect ( () => { this.top_spacer.visible = true; } );
         this.top_spacer.can_focus = true;
         bottom.pack_start (this.top_spacer, false, false, 0);
         
         //searchbar
-        this.searchbar = new Slingscold.Frontend.Searchbar ("...");
+        this.searchbar = new Slingscold.Frontend.Searchbar (" ");
         this.searchbar.changed.connect (this.search);
         //jarak samping
         int medio = (monitor_dimensions.width / 2) - 120; //place the search bar in the center of the screen
         bottom.pack_start (this.searchbar, false, true, medio);
         
         //jarak atas 
-        container.pack_start (bottom, false, true, 20); 
+        container.pack_start (bottom, false, true, 90); 
         container.pack_start (top, false, true, 0); 
         
         this.grid = new Gtk.Grid();
@@ -293,14 +293,18 @@ public class SlingscoldWindow : Widgets.CompositedWindow {
         var context = Gdk.cairo_create (widget.get_window ());
 
         // Semi-dark background
-        var linear_gradient = new Cairo.Pattern.linear (size.x, size.y, size.x, size.y + size.height);
-        linear_gradient.add_color_stop_rgba (0.0, 0.0, 0.0, 0.0, 1);
-        linear_gradient.add_color_stop_rgba (0.50, 0.0, 0.0, 0.0, 0.90);
-        linear_gradient.add_color_stop_rgba (0.99, 0.0, 0.0, 0.0, 0.80);
-                
-        context.set_source (linear_gradient);
-        context.paint ();
+        //  var linear_gradient = new Cairo.Pattern.linear (size.x, size.y, size.x, size.y + size.height);
+        //  linear_gradient.add_color_stop_rgba (0.0, 0.0, 0.0, 0.0, 1);
+        //  linear_gradient.add_color_stop_rgba (0.50, 0.0, 0.0, 0.0, 0.90);
+        //  linear_gradient.add_color_stop_rgba (0.99, 0.0, 0.0, 0.0, 0.80);
+        //  context.set_source (linear_gradient);
+        //  context.paint ();
         
+        var transparent = new Cairo.Pattern.rgba(0,0,0,0.8);
+
+        context.set_source (transparent);
+        context.paint ();
+
         return false;
     }
     
@@ -326,7 +330,11 @@ public class SlingscoldWindow : Widgets.CompositedWindow {
                 }
                 return true;
             case "BackSpace":
-                this.searchbar.text = this.searchbar.text.slice (0, (int) this.searchbar.text.length - 1);
+                if ((bool)(event.state & Gdk.ModifierType.CONTROL_MASK)) {
+                    this.searchbar.text = "";
+                } else {
+                    this.searchbar.text = this.searchbar.text.slice (0, (int) this.searchbar.text.length - 1);
+                }
                 return true;
             case "Left":
                 var current_item = this.grid.get_children ().index (this.get_focus ());
