@@ -20,8 +20,8 @@ namespace Slingscold.Frontend {
     public class Searchbar : Gtk.Box {
         
         // Constants
-        const int WIDTH = 240; // Search bar width
-        const int HEIGHT = 26; // Search bar height
+        const int WIDTH = 250; // Search bar width
+        const int HEIGHT = 40; // Search bar height
         
         // Signals
         public signal void changed ();
