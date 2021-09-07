@@ -32,7 +32,7 @@ namespace Slingscold.Frontend {
 
         // Properties
         public new GLib.List<Gtk.Widget> children;
-        public int active = -1;
+        public int active = 0;
         private int old_active = -1;
         private int skip_flag = 0;
 
