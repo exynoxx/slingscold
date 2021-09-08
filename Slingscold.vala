@@ -93,20 +93,20 @@ public class SlingscoldWindow : Widgets.CompositedWindow {
         this.categories.set_active (0);
         //top.pack_start (this.categories, true, true, 20); // With categories or not
         
-        this.top_spacer = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 200);
+        this.top_spacer = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 0);
         this.top_spacer.realize.connect ( () => { this.top_spacer.visible = true; } );
         this.top_spacer.can_focus = true;
         bottom.pack_start (this.top_spacer, false, false, 0);
         
         //searchbar
-        this.searchbar = new Slingscold.Frontend.Searchbar (" ");
+        this.searchbar = new Slingscold.Frontend.Searchbar ("search for apps");
         this.searchbar.changed.connect (this.search);
         //jarak samping
         int medio = (monitor_dimensions.width / 2) - 120; //place the search bar in the center of the screen
         bottom.pack_start (this.searchbar, false, true, medio);
         
         //jarak atas 
-        container.pack_start (bottom, false, true, 90); 
+        container.pack_start (bottom, false, true, 50); 
         container.pack_start (top, false, true, 0); 
         
         this.grid = new Gtk.Grid();
