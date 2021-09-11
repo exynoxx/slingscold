@@ -75,10 +75,23 @@ public class SlingscoldWindow : Widgets.CompositedWindow {
         this.background_uri = this.background_uri.replace("file://","");
         this.background_uri = this.background_uri.replace("%20"," ");
         this.background_uri = this.background_uri.replace("\n","");
-        var original = new Gdk.Pixbuf.from_file(this.background_uri);
-        var result = original.copy();
-        GaussianBlur(original,result,20);
-        this.background = result;
+
+        try{
+            var original = new Gdk.Pixbuf.from_file(this.background_uri);
+            var result = original.copy();
+            GaussianBlur(original,result,20);
+            this.background = result;
+        } catch (Error e){
+            stdout.printf ("Message: \"%s\"\n", e.message);
+		    stdout.printf ("Error code: FileError.EXIST = %d\n", e.code);
+
+            var root = Gdk.get_default_root_window();
+            var root_pixbuf = Gdk.pixbuf_get_from_window(root,0,0,root.get_width(),root.get_height());
+            var result = root_pixbuf.copy();
+            GaussianBlur(root_pixbuf,result,20);
+            this.background = result;
+
+        }
         
         // Get all apps
         Slingscold.Backend.GMenuEntries.enumerate_apps (Slingscold.Backend.GMenuEntries.get_all (), this.icons, this.icon_size, out this.apps);
@@ -320,21 +333,8 @@ public class SlingscoldWindow : Widgets.CompositedWindow {
         //  context.paint ();
 
 
-
-        //  Cairo.ImageSurface image = new Cairo.ImageSurface.from_jpg (this.background_uri);
-        //  int w = image.getwidth ();
-        //  int h = image.getheight ();
-        //  context.scale (256.0/w, 256.0/h);
-        //context.set_source_surface (image, 0, 0);
-
-
-        //string image_path = Path.build_filename (Path.get_dirname (args[0]) , "romedalen.png");
-        
-
-
         Gdk.cairo_set_source_pixbuf(context,this.background,0,0);
-        context.paint ();
-
+        context.paint ();   
 
         return false;
     }
