@@ -109,15 +109,15 @@ public class SlingscoldWindow : Widgets.CompositedWindow {
         var top = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 0);
         var bottom = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 0);
         
-        this.categories = new Slingscold.Frontend.Indicators ();
-        this.categories.child_activated.connect (this.change_category);
-        this.categories.append ("All");
-        foreach (GMenu.TreeDirectory category in this.all_categories) {
-            this.categories.append (category.get_name ());
-        }
+        //  this.categories = new Slingscold.Frontend.Indicators ();
+        //  this.categories.child_activated.connect (this.change_category);
+        //  this.categories.append ("All");
+        //  foreach (GMenu.TreeDirectory category in this.all_categories) {
+        //      this.categories.append (category.get_name ());
+        //  }
         
-        //category appllication
-        this.categories.set_active (0);
+        //  //category appllication
+        //  this.categories.set_active (0);
         //top.pack_start (this.categories, true, true, 20); // With categories or not
         
         this.top_spacer = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 0);
@@ -137,15 +137,15 @@ public class SlingscoldWindow : Widgets.CompositedWindow {
         container.pack_start (top, false, true, 0); 
         
         this.grid = new Gtk.Grid();
-        this.grid.set_row_spacing (70);
-        this.grid.set_column_spacing (30);
+        this.grid.set_row_spacing (50);
+        this.grid.set_column_spacing (50);
         this.grid.set_halign (Gtk.Align.CENTER);
         // Make icon grid and populate
         if ((monitor_dimensions.width / (double)monitor_dimensions.height) < 1.4) { // Monitor 5:4, 4:3
             this.grid_x = 5;
             this.grid_y = 5;
         } else { // Monitor 16:9
-            this.grid_x = 4;
+            this.grid_x = 5;
             this.grid_y = 6;
         }
         // Initialize the grid
