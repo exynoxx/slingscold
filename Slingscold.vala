@@ -547,6 +547,36 @@ public class SlingscoldWindow : Widgets.CompositedWindow {
             case "Down":
             case "Up":
                 break; // used to stop refreshing the grid on arrow key press
+            
+            case "1":
+                this.pages.set_active(0);
+                break;
+            
+            case "2":
+                this.pages.set_active(1);
+                break;
+            case "3":
+                this.pages.set_active(2);
+                break;
+            case "4":
+                this.pages.set_active(3);
+                break;
+            case "5":
+                this.pages.set_active(4);
+                break;
+            case "6":
+                this.pages.set_active(5);
+                break;
+            case "7":
+                this.pages.set_active(6);
+                break;
+            case "8":
+                this.pages.set_active(7);
+                break;
+            case "9":
+                this.pages.set_active(8);
+                break;
+
             default:
                 this.searchbar.text = this.searchbar.text + event.str;
                 break;
