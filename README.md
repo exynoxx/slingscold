@@ -55,3 +55,11 @@ Note: Some themes don't have the 'application-default-icon'. Slingscold needs to
 * Removed libunique dependency (for Wayland compatibility)
 * Several code improvements and bug fixes
 * Ported to GTK+ 3.0
+
+## FORK changes
+* The background is changed to the desktop background found in gsettings but blurred, if no background is found in gsettings, take screenshot and blur that.
+* The searchbar style has been "flattened" to look like MacOS. 
+* The page indicator has been enlarged. 
+* Grid size and spacing has been adjusted. 
+* More Keyboard events added. 
+* Fix crash bug.
