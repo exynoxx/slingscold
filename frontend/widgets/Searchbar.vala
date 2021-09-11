@@ -148,11 +148,11 @@ namespace Slingscold.Frontend {
         
         private bool draw_background (Gtk.Widget widget, Cairo.Context ctx) {
             widget.get_style_context ().add_class ("search_bg");
-            //  Gtk.Allocation size;
-            //  widget.get_allocation (out size);
-            //  var context = Gdk.cairo_create (widget.get_window ());
+            Gtk.Allocation size;
+            widget.get_allocation (out size);
+            var context = Gdk.cairo_create (widget.get_window ());
             
-            //  // Draw bottom white border
+            // Draw bottom white border
             //  Slingscold.Frontend.Utilities.draw_rounded_rectangle (context, 6, -0.5, size);
             //  var linear_stroke = new Cairo.Pattern.linear(size.x, size.y, size.x, size.y + size.height);
             //  linear_stroke.add_color_stop_rgba (0.0,  1.0, 1.0, 1.0, 0.0);
@@ -181,6 +181,15 @@ namespace Slingscold.Frontend {
             //  Slingscold.Frontend.Utilities.draw_rounded_rectangle (context, 6, 1.5, size);
             //  context.set_source_rgba (0.0, 0.0, 0.0, 0.2);
             //  context.stroke ();
+
+            Slingscold.Frontend.Utilities.draw_rounded_rectangle (context, 20, 0, size);
+            var color = new Cairo.Pattern.rgba(255,255,255,0.2);
+            //  linear_stroke.add_color_stop_rgba (0.0,  1.0, 1.0, 1.0, 0.0);
+            //  linear_stroke.add_color_stop_rgba (0.85,  1.0, 1.0, 1.0, 0.0);
+            //  linear_stroke.add_color_stop_rgba (1.0,  1.0, 1.0, 1.0, 0.4);
+            context.set_source (color);
+            context.fill ();
+
             
             return false;
         }
