@@ -49,10 +49,10 @@ namespace Slingscold.Frontend {
 
             var label = new Gtk.Label(thelabel);
             var white = Gdk.RGBA ();
-            white.parse("#FFFFFF");
+            white.parse("#FDFDFD");
             label.override_color (Gtk.StateFlags.NORMAL, white);
             var font = new Pango.FontDescription ();
-            font.set_size (9500);
+            font.set_size (12000);
             font.set_weight (Pango.Weight.HEAVY);
             label.override_font (font);
 
@@ -61,8 +61,8 @@ namespace Slingscold.Frontend {
             label.set_valign(Gtk.Align.CENTER);
             label.set_margin_top(5);
             label.set_margin_bottom(5);
-            label.set_margin_start(15);
-            label.set_margin_end(15);
+            label.set_margin_start(20);
+            label.set_margin_end(20);
             indicator.add(label);
             this.children.append(indicator);
 
@@ -159,11 +159,12 @@ namespace Slingscold.Frontend {
             double x = size_old.x + (size_new.x - (double) size_old.x) * progress;
             double width = size_old.width + (size_new.width - (double) size_old.width) * progress;
 
-            context.set_source_rgba (0.1, 0.1, 0.1, 0.9); //gray color
-            double offset = 7.0;
-            double radius = 12.0;
-            context.move_to (x + radius, size.y + offset);
-            context.arc (x + width - radius - offset, size.y + size.height - radius - (offset / 2), radius, 0, Math.PI * 2);
+            context.set_source_rgba (0.1, 0.1, 0.1, 0.5); //gray color
+            double offset_x = 5;
+            double offset_y = 5;
+            double radius = 20;
+            context.move_to (x + radius, size.y + offset_y);
+            context.arc (x + width - radius - offset_x, size.y + size.height - radius - offset_y, radius, 0, Math.PI * 2);
             context.fill ();
 
             return false;

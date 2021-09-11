@@ -163,7 +163,7 @@ public class SlingscoldWindow : Widgets.CompositedWindow {
         this.pages.child_activated.connect ( () => { this.update_grid (this.filtered); } );
         
         var pages_wrapper = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 0);
-        pages_wrapper.set_size_request (-1, 30);        
+        pages_wrapper.set_size_request (-1, 50);        
         container.pack_end (pages_wrapper, false, true, 15);
         
         // Find number of pages and populate
