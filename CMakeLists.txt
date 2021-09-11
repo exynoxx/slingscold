@@ -40,7 +40,6 @@ PACKAGES
     gio-unix-2.0
     libgnome-menu-3.0
 OPTIONS
-    --thread
 )
 
 INSTALL (FILES data/slingscold.desktop DESTINATION /usr/share/applications/)
