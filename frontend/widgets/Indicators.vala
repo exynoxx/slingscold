@@ -82,7 +82,7 @@ namespace Slingscold.Frontend {
 
         public void set_active_no_signal (int index) {
 
-            if (index <= ((int)this.children.length - 1)) { // make sure the requested active item is in the children list
+            if (index <= ((int)this.children.length() - 1)) { // make sure the requested active item is in the children list
                 this.old_active = this.active;
                 this.active = index;
                 this.change_focus ();
