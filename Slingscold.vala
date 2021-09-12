@@ -126,7 +126,7 @@ public class SlingscoldWindow : Widgets.CompositedWindow {
         bottom.pack_start (this.top_spacer, false, false, 0);
         
         //searchbar
-        this.searchbar = new Slingscold.Frontend.Searchbar ("search for apps");
+        this.searchbar = new Slingscold.Frontend.Searchbar ("Search");
         this.searchbar.changed.connect (this.search);
         //jarak samping
         int medio = (monitor_dimensions.width / 2) - 120; //place the search bar in the center of the screen
