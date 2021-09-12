@@ -79,7 +79,7 @@ public class SlingscoldWindow : Widgets.CompositedWindow {
         try{
             var original = new Gdk.Pixbuf.from_file(this.background_uri);
             var result = original.copy();
-            GaussianBlur(original,result,20);
+            Slingscold.Frontend.Utilities.GaussianBlur(original,result,20);
             this.background = result;
         } catch (Error e){
             stdout.printf ("Message: \"%s\"\n", e.message);
@@ -88,7 +88,7 @@ public class SlingscoldWindow : Widgets.CompositedWindow {
             var root = Gdk.get_default_root_window();
             var root_pixbuf = Gdk.pixbuf_get_from_window(root,0,0,root.get_width(),root.get_height());
             var result = root_pixbuf.copy();
-            GaussianBlur(root_pixbuf,result,10);
+            Slingscold.Frontend.Utilities.GaussianBlur(root_pixbuf,result,10);
             this.background = result;
 
         }
@@ -337,169 +337,6 @@ public class SlingscoldWindow : Widgets.CompositedWindow {
         context.paint ();   
 
         return false;
-    }
-
-    //https://github.com/mdymel/superfastblur/blob/master/SuperfastBlur/GaussianBlur.cs
-    public void GaussianBlur(Gdk.Pixbuf image, Gdk.Pixbuf result, int radial){
-        var width = image.get_width();
-        var height = image.get_height();
-
-        var alpha = new int[width * height];
-        var red = new int[width * height];
-        var green = new int[width * height];
-        var blue = new int[width * height];
-
-        uchar *pixels = image.get_pixels();
-        var rowstride = image.get_rowstride();
-        var nchannel = image.get_n_channels();
-
-
-        for (var x = 0; x < width; x++){
-            for (var y = 0; y < height; y++){
-                var i = y * width + x;
-                var p = pixels + y * rowstride + x * nchannel;
-
-                //stdout.printf("x=%d, y=%d, w*h=%d, i=%d, width=%d, height=%d\n", x,y,width*height, i,width,height);
-                
-                red[i] = p[0];
-                green[i] = p[1];
-                blue[i] = p[2];
-                
-                alpha[i] = p[3];
-            }
-        }
-
-        var newAlpha = new int[width * height];
-        var newRed = new int[width * height];
-        var newGreen = new int[width * height];
-        var newBlue = new int[width * height];
-        var dest = new int[width * height];
-
-        //  call_async.begin ((obj, res) => {
-        //      var ret = call_async.end (res);
-        //  });
-    
-        gaussBlur_4.begin(alpha, newAlpha, radial,width,height);
-        gaussBlur_4.begin(red, newRed, radial,width,height);
-        gaussBlur_4.begin(green, newGreen, radial,width,height);
-        gaussBlur_4.begin(blue, newBlue, radial,width,height);
-
-        pixels = result.get_pixels();
-
-        for (var x = 0; x < width; x++){
-            for (var y = 0; y < height; y++){
-                var i = y * width + x;
-                var p = pixels + y * rowstride + x * nchannel;
-
-                if (newAlpha[i] > 255) newAlpha[i] = 255;
-                if (newRed[i] > 255) newRed[i] = 255;
-                if (newGreen[i] > 255) newGreen[i] = 255;
-                if (newBlue[i] > 255) newBlue[i] = 255;
-
-                if (newAlpha[i] < 0) newAlpha[i] = 0;
-                if (newRed[i] < 0) newRed[i] = 0;
-                if (newGreen[i] < 0) newGreen[i] = 0;
-                if (newBlue[i] < 0) newBlue[i] = 0;
-                
-                p[0] = (uchar)newRed[i];
-                p[1] = (uchar)newGreen[i];
-                p[2] = (uchar)newBlue[i];
-                p[3] = (uchar)newAlpha[i];
-            }
-        }
-
-        //dest[i] = (int)((uint)(newAlpha[i] << 24) | (uint)(newRed[i] << 16) | (uint)(newGreen[i] << 8) | (uint)newBlue[i]);
-    }
-
-    private async void gaussBlur_4(int[] source, int[] dest, int r, int width, int height)
-    {
-        var bxs = boxesForGauss(r, 3);
-        boxBlur_4(source, dest, width, height, (bxs[0] - 1) / 2);
-        boxBlur_4(dest, source, width, height, (bxs[1] - 1) / 2);
-        boxBlur_4(source, dest, width, height, (bxs[2] - 1) / 2);
-    }
-
-    private int[] boxesForGauss(int sigma, int n){
-        var wIdeal = Math.sqrt((12 * sigma * sigma / n) + 1);
-        var wl = (int)Math.floor(wIdeal);
-        if (wl % 2 == 0) wl--;
-        var wu = wl + 2;
-
-        var mIdeal = (double)(12 * sigma * sigma - n * wl * wl - 4 * n * wl - 3 * n) / (-4 * wl - 4);
-        var m = (int)Math.round(mIdeal);
-
-        var sizes = new int[n];
-        for (var i = 0; i < n; i++) 
-            sizes[i] = (i < m) ? wl : wu;
-        return sizes;
-    }
-
-    private void boxBlur_4(int[] source, int[] dest, int w, int h, int r){
-        for (var i = 0; i < source.length; i++) dest[i] = source[i];
-        boxBlurH_4(dest, source, w, h, r);
-        boxBlurT_4(source, dest, w, h, r);
-    }
-
-    private void boxBlurH_4(int[] source, int[] dest, int w, int h, int r){
-        
-        var iar = (double)1 / (r + r + 1);
-        for (var i = 0; i < h; i++){
-            var ti = i * w;
-            var li = ti;
-            var ri = ti + r;
-            var fv = source[ti];
-            var lv = source[ti + w - 1];
-            var val = (r + 1) * fv;
-            for (var j = 0; j < r; j++) val += source[ti + j];
-            for (var j = 0; j <= r; j++){
-                val += source[ri++] - fv;
-                dest[ti++] = (int)Math.round(val * iar);
-            }
-            for (var j = r + 1; j < w - r; j++){
-                val += source[ri++] - dest[li++];
-                dest[ti++] = (int)Math.round(val * iar);
-            }
-            for (var j = w - r; j < w; j++){
-                val += lv - source[li++];
-                dest[ti++] = (int)Math.round(val * iar);
-            }
-        }
-    }
-
-    private void boxBlurT_4(int[] source, int[] dest, int w, int h, int r)
-    {
-        var iar = (double)1 / (r + r + 1);
-        for (var i = 0; i < w; i++){
-            var ti = i;
-            var li = ti;
-            var ri = ti + r * w;
-            var fv = source[ti];
-            var lv = source[ti + w * (h - 1)];
-            var val = (r + 1) * fv;
-            for (var j = 0; j < r; j++) val += source[ti + j * w];
-            for (var j = 0; j <= r; j++)
-            {
-                val += source[ri] - fv;
-                dest[ti] = (int)Math.round(val * iar);
-                ri += w;
-                ti += w;
-            }
-            for (var j = r + 1; j < h - r; j++)
-            {
-                val += source[ri] - source[li];
-                dest[ti] = (int)Math.round(val * iar);
-                li += w;
-                ri += w;
-                ti += w;
-            }
-            for (var j = h - r; j < h; j++)
-            {
-                val += lv - source[li];
-                dest[ti] = (int)Math.round(val * iar);
-                li += w;
-                ti += w;
-            }
-        }
     }
     
     // Keyboard shortcuts
