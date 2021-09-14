@@ -1,1 +1,0 @@
-/usr/bin/cc -fPIC   -shared -Wl,-soname,libslingscold.so -o libslingscold.so CMakeFiles/slingscold.dir/Slingscold.c.o -lgee-0.8 -lpeas-gtk-1.0 -lbudgie-plugin -lpeas-1.0 -lgmodule-2.0 -lgirepository-1.0 -lgtk-3 -lgdk-3 -lpangocairo-1.0 -lpango-1.0 -latk-1.0 -lcairo-gobject -lcairo -lgdk_pixbuf-2.0 -lgio-2.0 -lgobject-2.0 -lglib-2.0 -lm 

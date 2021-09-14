@@ -2,7 +2,7 @@ cmake_minimum_required (VERSION 2.6)
 SET(CMAKE_COLOR_MAKEFILE ON)
 SET(CMAKE_VERBOSE_MAKEFILE OFF)
 project (slingscold)
-list(APPEND CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake/vala )
+list(APPEND CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/../../cmake/vala )
 
 find_package(PkgConfig)
 pkg_check_modules(DEPS REQUIRED gtk+-3.0 gee-0.8 gio-unix-2.0 gio-2.0 libpeas-gtk-1.0 budgie-1.0 gobject-2.0 )
