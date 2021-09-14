@@ -15,7 +15,9 @@
 * You should have received a copy of the GNU General Public License along
 * with Slingscold. If not, see http://www.gnu.org/licenses/.
 */
-public class SlingscoldWindow : Widgets.CompositedWindow {
+
+[DBus(name = "org.libredeb.SlingscoldWindow")]
+public class SlingscoldWindow : Widgets.CompositedWindow{
 
     public GLib.List<Slingscold.Frontend.AppItem> children = new GLib.List<Slingscold.Frontend.AppItem> ();
     public Slingscold.Frontend.Searchbar searchbar;
@@ -182,6 +184,13 @@ public class SlingscoldWindow : Widgets.CompositedWindow {
         this.draw.connect (this.draw_background);
         //this.focus_out_event.connect ( () => { this.destroy(); return true; } ); // close Slingscold when the window loses focus
     }
+
+    //dbus hook
+    [DBus(name = "show")]
+    public bool show() {
+        this.show_all();
+        return true;
+    }
     
     private void populate_grid () {        
     
@@ -199,7 +208,7 @@ public class SlingscoldWindow : Widgets.CompositedWindow {
                     
                     try {
                         new GLib.DesktopAppInfo.from_filename (this.filtered.get((int) (this.children.index(item) + (this.pages.active * this.grid_y * this.grid_x)))["desktop_file"]).launch (null, null);
-                        this.destroy();
+                        this.hide();
                     } catch (GLib.Error e) {
                         stdout.printf("Error! Load application: " + e.message);
                     }
@@ -344,7 +353,7 @@ public class SlingscoldWindow : Widgets.CompositedWindow {
         switch (Gdk.keyval_name (event.keyval)) {
         
             case "Escape":
-                this.destroy ();
+                this.hide ();
                 return true;
             case "ISO_Left_Tab":
                 this.page_left ();
@@ -443,29 +452,68 @@ public class SlingscoldWindow : Widgets.CompositedWindow {
     }
     
     // Override destroy for fade out and stuff
-    public new void destroy () {
-        // Restore windows
-        //Wnck.Screen.get_default ().toggle_showing_desktop (false);
+    //  public new void destroy () {
+    //      // Restore windows
+    //      //Wnck.Screen.get_default ().toggle_showing_desktop (false);
         
-        base.destroy();
-        Gtk.main_quit();
-    }
+    //      base.destroy();
+    //      Gtk.main_quit();
+    //  }
     
+}
+
+void new_instance (string[] args){
+    Gtk.init (ref args);
+    Gtk.Application app = new Gtk.Application ("org.libredeb.slingscold", GLib.ApplicationFlags.FLAGS_NONE);	
+    var main_win = new SlingscoldWindow ();    
+    
+
+    //dbus-send --session --type=method_call --dest=org.libredeb.slingscold /org/libredeb/slingscold/win org.libredeb.SlingscoldWindow.show
+
+    Bus.own_name (BusType.SESSION, "org.libredeb.slingscold", /* name to register */
+        BusNameOwnerFlags.NONE, /* flags */
+        (conn)=>{
+            try {
+                // start service and register it as dbus object
+                conn.register_object ("/org/libredeb/slingscold/win", main_win);
+            } catch (IOError e) {
+                stderr.printf ("Could not register service: %s\n", e.message);
+            }
+        }, /* callback function on registration succeeded */
+        () => {}, /* callback on name register succeeded */
+        () => stderr.printf ("Could not acquire name\n"));
+
+    app.activate.connect( () => {
+        if (app.get_windows ().length () == 0) {           
+            main_win.set_application (app);
+            //main_win.show_all ();
+            Gtk.main ();
+        }});
+    app.run (args);    
+    //new MainLoop ().run ();
 }
 
 int main (string[] args) {
 
-	Gtk.init (ref args);
-        Gtk.Application app = new Gtk.Application ("org.libredeb.slingscold", GLib.ApplicationFlags.FLAGS_NONE);	
-        app.activate.connect( () => {
-            if (app.get_windows ().length () == 0) {
-                var main_win = new SlingscoldWindow ();            
-                main_win.set_application (app);
-                main_win.show_all ();
-                Gtk.main ();
-            }});
-        app.run (args);
-	return 1;
+    //  try {
+    //      proxy_sling main_instance = Bus.get_proxy_sync (BusType.SESSION, "org.libredeb.slingscold","/org/libredeb/slingscold/win");
+    //      main_instance.show();
+    //      stdout.printf("FOUND!!!");
+    //      return 1;
+    //  } catch (IOError e) {
+    //      stdout.printf ("NOT FOUND### %s\n", e.message);
+    //  }
+    string ret;
+    Process.spawn_command_line_sync ("dbus-send --print-reply --session --type=method_call --dest=org.libredeb.slingscold /org/libredeb/slingscold/win org.libredeb.SlingscoldWindow.show",out ret);
+
+    if (ret.contains("true")){
+        return 0;
+    }
+
+
+	new_instance(args);
+	
+    return 1;
 	
 }
 
