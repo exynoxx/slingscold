@@ -486,7 +486,7 @@ void new_instance (string[] args){
     app.activate.connect( () => {
         if (app.get_windows ().length () == 0) {           
             main_win.set_application (app);
-            //main_win.show_all ();
+            main_win.show_all ();
             Gtk.main ();
         }});
     app.run (args);    
@@ -509,7 +509,6 @@ int main (string[] args) {
     if (ret.contains("true")){
         return 0;
     }
-
 
 	new_instance(args);
 	
