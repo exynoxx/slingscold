@@ -1,0 +1,2 @@
+# Hashes of file build rules.
+a2b96553cc6d1581aa72ae9b2dd363a8 Slingscold.c

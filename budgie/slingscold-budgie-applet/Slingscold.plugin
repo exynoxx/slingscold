@@ -1,0 +1,7 @@
+[Plugin]
+Module=libslingscold.so
+Name=Slingscold
+Description=Application Launcher
+Authors=exynoxx
+Copyright=do whatever license
+Icon=view-grid-symbolic

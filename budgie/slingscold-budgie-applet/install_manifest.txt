@@ -1,0 +1,2 @@
+/usr/lib/budgie-desktop/plugins/slingscold-launcher/libslingscold.so
+/usr/lib/budgie-desktop/plugins/slingscold-launcher/Slingscold.plugin

@@ -1,0 +1,7 @@
+/home/nicholas/Dokumenter/git/slingscold/budgie/slingscold-budgie-applet/CMakeFiles/edit_cache.dir
+/home/nicholas/Dokumenter/git/slingscold/budgie/slingscold-budgie-applet/CMakeFiles/install/strip.dir
+/home/nicholas/Dokumenter/git/slingscold/budgie/slingscold-budgie-applet/CMakeFiles/slingscold.dir
+/home/nicholas/Dokumenter/git/slingscold/budgie/slingscold-budgie-applet/CMakeFiles/rebuild_cache.dir
+/home/nicholas/Dokumenter/git/slingscold/budgie/slingscold-budgie-applet/CMakeFiles/list_install_components.dir
+/home/nicholas/Dokumenter/git/slingscold/budgie/slingscold-budgie-applet/CMakeFiles/install/local.dir
+/home/nicholas/Dokumenter/git/slingscold/budgie/slingscold-budgie-applet/CMakeFiles/install.dir
