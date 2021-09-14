@@ -56,7 +56,7 @@ public class SlingscoldWindow : Widgets.CompositedWindow{
         this.set_type_hint (Gdk.WindowTypeHint.NORMAL);
         this.fullscreen ();
         //this.stick ();
-        //this.set_keep_above (true);
+        this.set_keep_above (true);
         this.set_default_size (monitor_dimensions.width,  monitor_dimensions.height);
 
         // Set icon size  
