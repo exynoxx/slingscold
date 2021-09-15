@@ -51,14 +51,6 @@ Note: Some themes don't have the 'application-default-icon'. Slingscold needs to
 # gtk-update-icon-cache /usr/share/icons/hicolor
 ```
 
-## Changelog
-**Version 1.1**
-* Clean all code to bring up correct names
-* New revamped icon in some different resolutions
-* Removed libunique dependency (for Wayland compatibility)
-* Several code improvements and bug fixes
-* Ported to GTK+ 3.0
-
 ## FORK changes
 * The background is changed to the desktop background found in gsettings but blurred, if no background is found in gsettings, take screenshot and blur that.
 * The searchbar style has been "flattened" to look like MacOS.
@@ -66,3 +58,5 @@ Note: Some themes don't have the 'application-default-icon'. Slingscold needs to
 * Grid size and spacing has been adjusted.
 * More Keyboard events added.
 * Fix crash bug.
+* DBus support: Keep instance running in the background for better startup times.
+* Budgie: Applet startup button has been added.
