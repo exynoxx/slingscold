@@ -189,6 +189,8 @@ public class SlingscoldWindow : Widgets.CompositedWindow{
     [DBus(name = "show")]
     public bool show() {
         this.show_all();
+        // TODO: why does pages bug without this
+        this.pages.set_active (0);
         return true;
     }
     
@@ -353,7 +355,7 @@ public class SlingscoldWindow : Widgets.CompositedWindow{
         switch (Gdk.keyval_name (event.keyval)) {
         
             case "Escape":
-                this.hide ();
+                this.hide();
                 return true;
             case "ISO_Left_Tab":
                 this.page_left ();
