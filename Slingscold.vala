@@ -39,6 +39,7 @@ public class SlingscoldWindow : Widgets.CompositedWindow{
     
     private string background_uri;
     private Gdk.Pixbuf background;
+    private bool window_visible;
 
     public SlingscoldWindow () {
     
@@ -186,12 +187,19 @@ public class SlingscoldWindow : Widgets.CompositedWindow{
     }
 
     //dbus hook
-    [DBus(name = "show")]
-    public bool show() {
-        this.show_all();
-        // TODO: why does pages bug without this
-        this.pages.set_active (0);
-        return true;
+    [DBus(name = "toggleshow")]
+    public bool toggle_show() {
+        if (!this.window_visible) {
+            this.show_all();
+            // TODO: why does pages bug without this
+            this.pages.set_active (0);
+            this.window_visible = true;
+            return true;
+        } else {
+            this.hide();
+            this.window_visible = false;
+            return false;
+        }
     }
     
     private void populate_grid () {        
@@ -211,6 +219,7 @@ public class SlingscoldWindow : Widgets.CompositedWindow{
                     try {
                         new GLib.DesktopAppInfo.from_filename (this.filtered.get((int) (this.children.index(item) + (this.pages.active * this.grid_y * this.grid_x)))["desktop_file"]).launch (null, null);
                         this.hide();
+                        this.window_visible = false;
                     } catch (GLib.Error e) {
                         stdout.printf("Error! Load application: " + e.message);
                     }
@@ -356,6 +365,7 @@ public class SlingscoldWindow : Widgets.CompositedWindow{
         
             case "Escape":
                 this.hide();
+                this.window_visible=false;
                 return true;
             case "ISO_Left_Tab":
                 this.page_left ();
@@ -496,19 +506,10 @@ void new_instance (string[] args){
 }
 
 int main (string[] args) {
-
-    //  try {
-    //      proxy_sling main_instance = Bus.get_proxy_sync (BusType.SESSION, "org.libredeb.slingscold","/org/libredeb/slingscold/win");
-    //      main_instance.show();
-    //      stdout.printf("FOUND!!!");
-    //      return 1;
-    //  } catch (IOError e) {
-    //      stdout.printf ("NOT FOUND### %s\n", e.message);
-    //  }
     string ret;
-    Process.spawn_command_line_sync ("dbus-send --print-reply --session --type=method_call --dest=org.libredeb.slingscold /org/libredeb/slingscold/win org.libredeb.SlingscoldWindow.show",out ret);
+    Process.spawn_command_line_sync ("dbus-send --print-reply --session --type=method_call --dest=org.libredeb.slingscold /org/libredeb/slingscold/win org.libredeb.SlingscoldWindow.toggleshow",out ret);
 
-    if (ret.contains("true")){
+    if (ret.contains("true") || ret.contains("false")){
         return 0;
     }
 
